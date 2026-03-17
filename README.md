@@ -95,4 +95,4 @@ Ansible automatically applies to every server:
 ```
 
 ## CI Status
-![CI](https://github.com/YOUR_USERNAME/linux-infra-automation/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/minaroikegima/linux-infra-automation/actions/workflows/ci.yml/badge.svg)
