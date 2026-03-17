@@ -56,3 +56,43 @@ ansible-playbook -i inventory/hosts.yml playbooks/site.yml
 | Provisioning time | 4 hours manual | 18 minutes automated |
 | Manual steps | 60 steps | 2 commands |
 | Tasks automated | 0% | 80% |
+
+## Architecture Diagram
+```
+┌─────────────────────────────────────────────────────┐
+│                  Your Local Machine                  │
+│                                                     │
+│   ┌─────────────┐         ┌─────────────┐          │
+│   │  Terraform  │         │   Ansible   │          │
+│   │             │         │             │          │
+│   │ terraform   │         │ ansible-    │          │
+│   │ apply       │         │ playbook    │          │
+│   └──────┬──────┘         └──────┬──────┘          │
+└──────────┼─────────────────────┼──────────────────┘
+           │ provisions           │ configures
+           ▼                      ▼
+┌─────────────────────────────────────────────────────┐
+│                  AWS Infrastructure                  │
+│                                                     │
+│   ┌─────────────────────────────────────────────┐  │
+│   │                    VPC                       │  │
+│   │                                             │  │
+│   │   ┌──────────────┐   ┌──────────────┐      │  │
+│   │   │Public Subnet │   │Private Subnet│      │  │
+│   │   │              │   │              │      │  │
+│   │   │ ┌──────────┐ │   │ ┌──────────┐ │      │  │
+│   │   │ │ Web      │ │   │ │ App      │ │      │  │
+│   │   │ │ Server   │ │   │ │ Server   │ │      │  │
+│   │   │ └──────────┘ │   │ └──────────┘ │      │  │
+│   │   └──────────────┘   └──────────────┘      │  │
+│   └─────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────┘
+
+Ansible automatically applies to every server:
+✅ Common configuration (packages, timezone, logging)
+✅ CIS security hardening (SSH, firewall, kernel)
+✅ Monitoring agent installation
+```
+
+## CI Status
+![CI](https://github.com/YOUR_USERNAME/linux-infra-automation/actions/workflows/ci.yml/badge.svg)
