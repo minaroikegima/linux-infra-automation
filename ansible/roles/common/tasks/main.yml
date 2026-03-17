@@ -51,6 +51,6 @@
 
 - name: Ensure chrony service is running
   ansible.builtin.service:
-    name: chronyd
+    name: chrony
     state: started
     enabled: true
