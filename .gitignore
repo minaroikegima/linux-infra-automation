@@ -1,0 +1,16 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+
+# Ansible
+*.retry
+ansible/inventory/hosts.yml
+
+# Credentials
+*.pem
+*.key
+.env

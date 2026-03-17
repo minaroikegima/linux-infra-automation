@@ -1,0 +1,20 @@
+---
+# Master playbook - orchestrates all server configuration
+
+- name: Apply common configuration to all servers
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - common
+
+- name: Harden all Linux servers
+  hosts: all
+  become: true
+  roles:
+    - hardening
+  vars:
+    allowed_ports:
+      - { port: "80", proto: "tcp" }
+      - { port: "443", proto: "tcp" }
+      - { port: "9100", proto: "tcp" }

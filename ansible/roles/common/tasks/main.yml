@@ -1,0 +1,56 @@
+---
+# Common tasks applied to every Linux server
+
+- name: Update apt package cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install common utility packages
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - vim
+      - git
+      - htop
+      - net-tools
+      - python3
+      - python3-pip
+      - ca-certificates
+      - gnupg
+    state: present
+
+- name: Set system timezone to UTC
+  community.general.timezone:
+    name: UTC
+
+- name: Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Create ops admin group
+  ansible.builtin.group:
+    name: ops
+    state: present
+
+- name: Configure journald log retention
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: '^#?SystemMaxUse=', line: 'SystemMaxUse=500M' }
+    - { regexp: '^#?MaxRetentionSec=', line: 'MaxRetentionSec=30day' }
+    - { regexp: '^#?Compress=', line: 'Compress=yes' }
+
+- name: Install and enable NTP
+  ansible.builtin.package:
+    name: chrony
+    state: present
+
+- name: Ensure chrony service is running
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true
